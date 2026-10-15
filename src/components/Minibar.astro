@@ -1,0 +1,25 @@
+---
+import {Icon} from "astro-icon/components";
+
+const navMap = [
+    {icon: 'pixelarticons:home', label: 'Home', anchor: '#top'},
+    {icon: 'pixelarticons:info-box', label: 'About', anchor: '#about'},
+    {icon: 'pixelarticons:shirt', label: 'Designs', anchor: '#designs'},
+    {icon: 'pixelarticons:chat', label: 'Ask me', anchor: '#askme'},
+];
+---
+
+<div class="fixed z-100 max-lg:m-auto max-lg:bottom-3 max-lg:left-1/2 max-lg:-translate-x-1/2
+            lg:right-4 lg:top-1/2 lg:-translate-y-1/2">
+    <div class="rounded-full bg-pink-500/40 backdrop-blur-sm border border-pink-200 p-3 flex flex-row lg:flex-col gap-2">
+        {
+            navMap.map((item, index) =>
+                (
+                        <a href={item.anchor}>
+                            <Icon name={item.icon} aria-label={item.label} class="size-8 lg:hover:scale-110"></Icon>
+                        </a>
+                )
+            )
+        }
+    </div>
+</div>

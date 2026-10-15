@@ -1,9 +1,11 @@
-# Sanity Clean Content Studio
+# Kino Koneko Showroom Website
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+## Overview
+This repo is built to host a local artist portfolio and showroom products.
 
-Now you can do the following things:
+## Tech Stack
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the Sanity community](https://www.sanity.io/community/join?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+Tech Stack used for this project:
+- **Astro** for frontend & composition
+- **GSAP** for animations & transitions
+- **Sanity** for CMS (managing products & such)
