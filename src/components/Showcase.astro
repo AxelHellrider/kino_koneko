@@ -1,0 +1,14 @@
+---
+import {getProducts, urlFor} from "../lib/sanity.ts";
+import {Swiper, SwiperSlide, SwiperWrapper} from "astro-swiper";
+
+const products = await getProducts();
+---
+<div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0"
+     id="designs">
+    {products.map((item) => (
+            <div>
+                {item.title} - {item.description}
+            </div>
+    ))}
+</div>

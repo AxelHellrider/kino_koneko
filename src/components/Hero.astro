@@ -1,5 +1,7 @@
 ---
 import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
+import { getBanners, urlFor } from '../lib/sanity';
+const banners = await getBanners();
 ---
 
 <div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0"
@@ -14,40 +16,24 @@ import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
                 resizeObserver: true
             }}>
         <SwiperWrapper>
-            <SwiperSlide class="group flex! flex-row items-center">
-                <div class="grow flex flex-col gap-4 opacity-0 -translate-x-6
-                            transition-all duration-1200 ease-out group-[.swiper-slide-active]:opacity-100
-                            group-[.swiper-slide-active]:translate-x-0 motion-reduce:transition-none">
-                    <h1 class="font-black italic text-xl lg:text-4xl uppercase tracking-tight
-                       text-shadow-[3px_3px_0_#DAB2FF]">
-                        kino koneko
-                    </h1>
-                    <span class="font-semibold text-md">Check out what we've got for you!</span>
-                </div>
-                <!-- todo: Animate the figure's position from right to left -->
-                <img class="opacity-0 translate-x-6
-                            transition-all duration-1200 ease-out group-[.swiper-slide-active]:opacity-100
-                            group-[.swiper-slide-active]:translate-x-0 motion-reduce:transition-none shrink-0 grow-0"
-                     src="/sailor_moon_stock_art.png"
-                     alt="Sailor Moon">
-            </SwiperSlide>
-            <SwiperSlide class="group flex! flex-row items-center">
-                <div class="grow flex flex-col gap-4 opacity-0 -translate-x-6
-                            transition-all duration-1200 ease-out group-[.swiper-slide-active]:opacity-100
-                            group-[.swiper-slide-active]:translate-x-0 motion-reduce:transition-none">
-                    <h1 class="font-black italic text-xl lg:text-4xl uppercase tracking-tight
-                       text-shadow-[3px_3px_0_#DAB2FF]">
-                        Asthmatic Wizard Collab
-                    </h1>
-                    <span class="font-semibold text-md">Check out what we've got for you!</span>
-                </div>
-                <!-- todo: Animate the figure's position from right to left -->
-                <img class="opacity-0 translate-x-6
-                            transition-all duration-1200 ease-out group-[.swiper-slide-active]:opacity-100
-                            group-[.swiper-slide-active]:translate-x-0 motion-reduce:transition-none shrink-0 grow-0"
-                     src="/sailor_moon_stock_art.png"
-                     alt="Sailor Moon">
-            </SwiperSlide>
+            {banners.map((b, i) => (
+                    <SwiperSlide class="flex! flex-row items-center">
+                        <div data-hero-text class="grow flex flex-col gap-4">
+                            <h1 class="font-black italic text-xl lg:text-4xl uppercase tracking-tight
+                                                   text-shadow-[3px_3px_0_#DAB2FF]">
+                                {b.title}
+                            </h1>
+                            {b.description && <span class="font-semibold text-md">{b.description}</span>}
+                            {b.linkHref && <a href={b.linkHref}>{b.linkLabel ?? 'Take a look'}</a>}
+                        </div>
+                        <img data-hero-figure
+                             src={urlFor(b.figure).format('webp').url()}
+                             alt={b.figure.alt}
+                             loading={i === 0 ? 'eager' : 'lazy'}
+                             fetchpriority={i === 0 ? 'high' : 'auto'}
+                             class="shrink-0 grow-0">
+                    </SwiperSlide>
+            ))}
         </SwiperWrapper>
     </Swiper>
 </div>

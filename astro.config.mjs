@@ -13,13 +13,14 @@ export default defineConfig({
     integrations: [
         icon({
             include: {
-                pixelarticons: ["*"],
+                pixelarticons: ["*"]
             },
         }),
         sanity({
-            projectId: "5ofkdek1",
+            projectId: "g1i4dle8",
             dataset: "production",
             useCdn: false,
+            apiVersion: '2026-10-15'
         }),
     ],
     fonts: [
