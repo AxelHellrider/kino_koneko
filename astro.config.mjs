@@ -20,7 +20,7 @@ export default defineConfig({
             projectId: "g1i4dle8",
             dataset: "production",
             useCdn: false,
-            apiVersion: '2026-10-15'
+            apiVersion: '2026-10-16'
         }),
     ],
     fonts: [
