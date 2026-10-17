@@ -29,5 +29,10 @@ ErrorDocument 500 /500.html
     AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
 </IfModule>
 
+# --- Keep the deploy tool's bookkeeping file private ---
+<Files ".ftp-deploy-sync-state.json">
+    Require all denied
+</Files>
+
 # --- Don't expose directory listings ---
 Options -Indexes
