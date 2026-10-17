@@ -10,13 +10,15 @@ export const initThemeColor = () => {
 
     const observer = new IntersectionObserver(
         (entries) => {
-            const visible = entries.find((e) => e.isIntersecting);
-            const color = visible?.target.getAttribute('data-theme-color');
+            // a slide leaving the screen still reports isIntersecting, so go by ratio
+            const shown = entries.filter((e) => e.intersectionRatio >= 0.5);
+            const top = shown.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            const color = top?.target.getAttribute('data-theme-color');
             if (!color) return;
             meta.content = color;
             document.documentElement.style.background = color;
         },
-        {threshold: 0.6},
+        {threshold: 0.5},
     );
     targets.forEach((el) => observer.observe(el));
 };

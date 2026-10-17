@@ -1,5 +1,5 @@
 ---
-import {urlFor, type Product} from '../lib/sanity';
+import {responsiveImage, type Product} from '../lib/sanity';
 import {cardStyle, numeralFor} from '../lib/tarot';
 
 interface Props {
@@ -9,9 +9,7 @@ interface Props {
 }
 const {product: p, index, eager = false} = Astro.props;
 
-const art = p.main_artwork
-    ? urlFor(p.main_artwork).width(640).format('webp').url()
-    : undefined;
+const art = p.main_artwork ? responsiveImage(p.main_artwork, [320, 480, 640]) : undefined;
 
 // shared by both faces
 const face = 'absolute inset-0 rounded-2xl border-[3px] border-ink backface-hidden ' +
@@ -42,7 +40,7 @@ const face = 'absolute inset-0 rounded-2xl border-[3px] border-ink backface-hidd
                 <div class="absolute inset-x-4 top-9 bottom-16 overflow-hidden border-2 border-ink bg-(--c2)
                             sm:inset-x-6 sm:top-10 sm:bottom-20">
                     {art
-                        ? <img src={art} alt={p.title}
+                        ? <img {...art} sizes="(max-width: 640px) 45vw, 25vw" alt={p.title}
                                loading={eager ? 'eager' : 'lazy'}
                                fetchpriority={eager ? 'high' : 'auto'}
                                width="640" height="960"

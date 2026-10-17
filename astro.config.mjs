@@ -32,7 +32,7 @@ export default defineConfig({
     integrations: [
         icon({
             include: {
-                pixelarticons: ["*"]
+                pixelarticons: ["home", "info-box", "shirt", "chat"]
             },
         }),
         sanity({

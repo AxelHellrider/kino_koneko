@@ -1,4 +1,3 @@
-import gsap from 'gsap';
 import {setFlipped} from './tarot';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -28,7 +27,8 @@ export const initDeck = (root: HTMLElement) => {
         count.textContent = `${left} of ${cards.length} left in the deck`;
     };
 
-    const animateDraw = (card: HTMLElement) => {
+    const animateDraw = async (card: HTMLElement) => {
+        const {default: gsap} = await import('gsap');
         const from = btn.getBoundingClientRect();
         const to = card.getBoundingClientRect();
         gsap.from(card, {
@@ -65,5 +65,13 @@ export const initDeck = (root: HTMLElement) => {
 
     cards.forEach((card) => (card.hidden = true));
     render();
+
+    // hidden cards' lazy images never load, so fetch them quietly once the page is idle
+    const preload = () =>
+        cards.forEach((card) => {
+            const img = card.querySelector('img');
+            if (img) Object.assign(new Image(), {srcset: img.srcset, sizes: img.sizes, src: img.currentSrc || img.src});
+        });
+    'requestIdleCallback' in window ? requestIdleCallback(preload) : setTimeout(preload, 2000);
     btn.addEventListener('click', () => (drawn >= cards.length ? reset() : draw()));
 };

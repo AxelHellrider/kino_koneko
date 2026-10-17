@@ -4,6 +4,15 @@ import {createImageUrlBuilder} from "@sanity/image-url";
 const builder = createImageUrlBuilder(sanityClient);
 export const urlFor = (source: any) => builder.image(source);
 
+/** `src` + `srcset` so each device downloads only the size it needs. */
+export const responsiveImage = (source: any, widths: number[]) => {
+    const at = (w: number) => urlFor(source).width(w).format('webp').url();
+    return {
+        src: at(widths[Math.floor(widths.length / 2)]),
+        srcset: widths.map((w) => `${at(w)} ${w}w`).join(', '),
+    };
+};
+
 // ---------- Products ----------
 
 export interface Colorway {

@@ -1,6 +1,6 @@
 ---
 import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
-import {urlFor, type Banner} from '../lib/sanity';
+import {responsiveImage, type Banner} from '../lib/sanity';
 import {colorVars, topEdgeColor} from '../lib/color';
 import {safeHref} from '../lib/safe';
 
@@ -30,7 +30,8 @@ const swiperOptions = {
                         {safeHref(b.linkHref) && <a href={safeHref(b.linkHref)}>{b.linkLabel ?? 'Take a look'}</a>}
                     </div>
                     <img data-hero-figure
-                         src={urlFor(b.figure).format('webp').url()}
+                         {...responsiveImage(b.figure, [480, 800, 1200])}
+                         sizes="(max-width: 1024px) 80vw, 40vw"
                          alt={b.figure.alt}
                          loading={i === 0 ? 'eager' : 'lazy'}
                          fetchpriority={i === 0 ? 'high' : 'auto'}
