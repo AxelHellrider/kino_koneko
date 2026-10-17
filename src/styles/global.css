@@ -10,8 +10,6 @@
     --color-gold: var(--color-amber-300);
     --color-amber: var(--color-amber-700);
 
-    --color-black: var(--color-black);
-    --color-white: var(--color-white);
 
     /* Angle in degrees */
     --panel-angle: 45deg;
