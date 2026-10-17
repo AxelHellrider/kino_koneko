@@ -1,0 +1,12 @@
+---
+interface Props {
+    id: string;
+    class?: string;
+}
+const {id, class: className} = Astro.props;
+---
+
+<!-- bottom padding on mobile keeps content clear of the floating Minibar -->
+<section id={id} class:list={['flex min-h-dvh p-4 pb-28 text-xl lg:pb-4', className]}>
+    <slot/>
+</section>
