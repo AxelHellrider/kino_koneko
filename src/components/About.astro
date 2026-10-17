@@ -1,10 +1,14 @@
 ---
 import Section from './Section.astro';
+import ContactLink from './ContactLink.astro';
+import {EMAIL} from '../lib/contact';
 ---
 
-<Section id="about" class="flex flex-col justify-center items-center">
-    <span>🎀Τα inside jokes σου, σε poster</span>
-    <span>🎀anime-inspired stuff</span>
-    <span>🎀business inquiries:</span>
-    <a href="mailto:kino.konekobusiness@gmail.com">kino.konekobusiness@gmail.com</a>
+<Section id="about" class="items-center justify-center">
+    <div class="mx-auto flex max-w-md flex-col items-center gap-4 px-6 text-center">
+        <span>🎀Τα inside jokes σου, σε poster</span>
+        <span>🎀anime-inspired stuff</span>
+        <span>🎀business inquiries:</span>
+        <ContactLink href={`mailto:${EMAIL}`}>{EMAIL}</ContactLink>
+    </div>
 </Section>

@@ -1,0 +1,16 @@
+---
+import type {HTMLAttributes} from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+const {href = '', class: className, ...rest} = Astro.props;
+// web links open in a new tab (or the app); mailto: hands off to the mail app
+const external = href.startsWith('http');
+---
+
+<a href={href}
+   target={external ? '_blank' : undefined}
+   rel={external ? 'noopener noreferrer' : undefined}
+   class:list={['font-black underline decoration-2 underline-offset-4 break-all', className]}
+   {...rest}>
+    <slot/>
+</a>

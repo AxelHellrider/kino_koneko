@@ -45,7 +45,7 @@ export default defineConfig({
     ],
     fonts: [
         {
-            name: "Bungee",
+            name: "Rammetto One",
             cssVariable: "--font-retro-pop",
             provider: fontProviders.google(),
             fallbacks: ["sans-serif"],
