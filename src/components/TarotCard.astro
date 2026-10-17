@@ -1,77 +1,68 @@
 ---
 import {urlFor, type Product} from '../lib/sanity';
+import {cardStyle, numeralFor} from '../lib/tarot';
 
 interface Props {
     product: Product;
     index: number;
-    eager?: boolean
+    eager?: boolean;
 }
 const {product: p, index, eager = false} = Astro.props;
-
-const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
-const numeral = ROMAN[(index + 1) % ROMAN.length];
-
-// cycle pastel pairs per card
-const PALETTE = [
-    ['#FFB3D9', '#FFD6EC'],
-    ['#CDB4FF', '#E4D6FF'],
-    ['#A8DCFF', '#D2EEFF'],
-    ['#B8F2D8', '#DDF8EC'],
-    ['#FFF1A8', '#FFF8D0'],
-];
-const [c1, c2] = PALETTE[index % PALETTE.length];
-const tilt = index % 2 === 0 ? '-2deg' : '2deg';
 
 const art = p.main_artwork
     ? urlFor(p.main_artwork).width(640).format('webp').url()
     : undefined;
+
+// shared by both faces
+const face = 'absolute inset-0 rounded-2xl border-[3px] border-ink backface-hidden ' +
+    'shadow-[4px_4px_0_var(--color-ink)] sm:shadow-[6px_6px_0_var(--color-ink)]';
 ---
 
-<article
-        data-tarot
-        class="tarot group relative aspect-[2/3] w-64 shrink-0 snap-center lg:w-auto"
-        style={`--c1:${c1}; --c2:${c2}; --tilt:${tilt}`}>
+<article data-tarot
+         class="group relative aspect-[2/3] w-full perspective-[1200px]"
+         style={cardStyle(index)}>
 
-    <div class="tarot-lift size-full">
-        <div class="tarot-inner relative size-full" data-flip>
+    <div class="size-full rotate-(--tilt) transition duration-300 motion-reduce:transition-none
+                hover:-translate-y-2.5 hover:rotate-0">
+        <div data-flip
+             class="relative size-full transform-3d transition-transform duration-700 ease-out
+                    motion-reduce:transition-none data-[flipped=true]:rotate-y-180">
 
             <!-- FRONT -->
-            <div class="tarot-face absolute inset-0 rounded-2xl border-[3px] border-[#1B1030]
-                  bg-linear-to-b from-(--c1) to-white shadow-[6px_6px_0_#1B1030]">
-                <div class="absolute inset-2 rounded-xl border-2 border-[#1B1030]/70"></div>
+            <div class:list={[face, 'bg-linear-to-b from-(--c1) to-white']}>
+                <div class="absolute inset-2 rounded-xl border-2 border-ink/70"></div>
 
-                <span class="absolute left-1/2 top-3.5 -translate-x-1/2 font-black italic text-sm tracking-widest">
-                  {numeral}
+                <span class="absolute left-1/2 top-3.5 -translate-x-1/2 text-sm font-black italic tracking-widest">
+                    {numeralFor(index)}
                 </span>
                 <span aria-hidden="true" class="absolute left-4 top-3.5 text-xs">✦</span>
                 <span aria-hidden="true" class="absolute right-4 top-3.5 text-xs">✦</span>
 
-                <!-- arched art window -->
-                <div class="absolute inset-x-6 top-10 bottom-20 overflow-hidden border-2 border-[#1B1030] bg-(--c2)">
+                <!-- art window -->
+                <div class="absolute inset-x-4 top-9 bottom-16 overflow-hidden border-2 border-ink bg-(--c2)
+                            sm:inset-x-6 sm:top-10 sm:bottom-20">
                     {art
                         ? <img src={art} alt={p.title}
                                loading={eager ? 'eager' : 'lazy'}
                                fetchpriority={eager ? 'high' : 'auto'}
                                width="640" height="960"
                                class="size-full object-bottom"/>
-                        :
-                            <div class="grid size-full place-items-center text-4xl" aria-hidden="true">✦</div>}
+                        : <div class="grid size-full place-items-center text-4xl" aria-hidden="true">✦</div>}
                 </div>
 
                 <!-- name plate -->
-                <div class="absolute inset-x-5 bottom-4 rounded-md border-2 border-[#1B1030] bg-white px-2 py-1.5 text-center">
-                    <h3 class="font-black italic text-sm uppercase leading-tight tracking-tight">{p.title}</h3>
+                <div class="absolute inset-x-3 bottom-3 rounded-md border-2 border-ink bg-white px-1.5 py-1 text-center
+                            sm:inset-x-5 sm:bottom-4 sm:px-2 sm:py-1.5">
+                    <h3 class="text-xs font-black italic uppercase leading-tight tracking-tight sm:text-sm">{p.title}</h3>
                 </div>
             </div>
 
             <!-- BACK -->
-            <div class="tarot-face tarot-back absolute inset-0 flex flex-col items-center justify-center gap-3
-                  rounded-2xl border-[3px] border-[#1B1030] bg-(--c1) p-6 text-center
-                  shadow-[6px_6px_0_#1B1030]">
-                <div class="absolute inset-2 rounded-xl border-2 border-[#1B1030]/70"></div>
+            <div class:list={[face, 'flex rotate-y-180 flex-col items-center justify-center gap-2 bg-(--c1) p-4 text-center sm:gap-3 sm:p-6']}>
+                <div class="absolute inset-2 rounded-xl border-2 border-ink/70"></div>
                 <span aria-hidden="true" class="text-xl">☾</span>
-                <h3 class="font-black italic uppercase leading-tight">{p.title}</h3>
-                {p.description && <p class="text-xs line-clamp-11">{p.description}</p>}
+                <h3 class="text-sm font-black italic uppercase leading-tight sm:text-base">{p.title}</h3>
+                {p.description && <p class="line-clamp-6 text-[11px] sm:line-clamp-11 sm:text-xs">{p.description}</p>}
                 <p class="text-[10px] opacity-70">Tap to flip back</p>
             </div>
 
@@ -81,60 +72,12 @@ const art = p.main_artwork
     <!-- one real button covers the card -->
     <button type="button" data-flip-btn aria-pressed="false"
             aria-label={`Flip card: ${p.title}`}
-            class="absolute inset-0 z-10 rounded-2xl focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#1B1030]">
+            class="absolute inset-0 z-10 rounded-2xl focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-ink">
     </button>
 </article>
 
-<style>
-    .tarot {
-        perspective: 1200px;
-    }
-
-    .tarot-lift {
-        transform: rotate(var(--tilt));
-        transition: transform 0.25s ease;
-    }
-
-    @media (hover: hover) {
-        .tarot:hover .tarot-lift {
-            transform: translateY(-10px) rotate(0deg);
-        }
-    }
-
-    .tarot-inner {
-        transform-style: preserve-3d;
-        transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .tarot-inner[data-flipped='true'] {
-        transform: rotateY(180deg);
-    }
-
-    .tarot-face {
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-    }
-
-    .tarot-back {
-        transform: rotateY(180deg);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .tarot-inner, .tarot-lift {
-            transition: none;
-        }
-    }
-</style>
-
 <script>
-    document.querySelectorAll<HTMLElement>('[data-tarot]').forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-flip]');
-        const btn = card.querySelector<HTMLButtonElement>('[data-flip-btn]');
-        if (!inner || !btn) return;
-        btn.addEventListener('click', () => {
-            const flipped = inner.dataset.flipped !== 'true';
-            inner.dataset.flipped = String(flipped);
-            btn.setAttribute('aria-pressed', String(flipped));
-        });
-    });
+    import {initFlip} from '../scripts/tarot';
+
+    initFlip();
 </script>

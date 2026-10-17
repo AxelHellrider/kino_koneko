@@ -5,6 +5,7 @@
     --color-lilac-purple: var(--color-purple-300);
     --color-main-purple: var(--color-purple-700);
     --color-midnight-purple: #130023;
+    --color-ink: #1B1030;
 
     --color-gold: var(--color-amber-300);
     --color-amber: var(--color-amber-700);
@@ -18,4 +19,13 @@
 
 :root {
     font-family: var(--font-retro-pop, 'sans-serif'), sans-serif;
+}
+
+/* Shared headline look: heavy italic caps with a lilac drop shadow */
+@utility retro-heading {
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-tight);
+    text-shadow: 3px 3px 0 var(--color-lilac-purple);
 }

@@ -1,6 +1,14 @@
 ---
-import '../styles/global.css';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Showcase from '../components/Showcase.astro';
+import AskMe from '../components/AskMe.astro';
 ---
 
-<Layout></Layout>
+<BaseLayout>
+    <Hero/>
+    <About/>
+    <Showcase/>
+    <AskMe/>
+</BaseLayout>

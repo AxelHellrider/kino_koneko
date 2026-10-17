@@ -4,6 +4,8 @@ import {createImageUrlBuilder} from "@sanity/image-url";
 const builder = createImageUrlBuilder(sanityClient);
 export const urlFor = (source: any) => builder.image(source);
 
+// ---------- Products ----------
+
 export interface Colorway {
     colorName: string;
     colorHex: string;
@@ -29,11 +31,9 @@ export interface Product {
     designs: Design[];
 }
 
-/**
- * Query done via GROG, Sanity's own SQL lingo.
- */
+/** Products by `order` ascending; unordered ones go last, oldest first. */
 const PRODUCT_QUERY = `
-  *[_type == "product"] | order(_createdAt desc) {
+  *[_type == "product"] | order(coalesce(order, 999999) asc, _createdAt asc) {
     _id, title, category, main_artwork, description, order,
     designs[]{
       name, artwork, availability, availabilityNote,
@@ -44,7 +44,8 @@ const PRODUCT_QUERY = `
 
 export const getProducts = () => sanityClient.fetch<Product[]>(PRODUCT_QUERY);
 
-// src/lib/sanity.ts
+// ---------- Banners ----------
+
 export interface Banner {
     _id: string;
     title: string;
@@ -55,12 +56,13 @@ export interface Banner {
     linkHref?: string;
 }
 
-export const getBanners = () =>
-    sanityClient.fetch<Banner[]>(`
-    *[_type == "banner" && active != false] | order(order asc) {
-      _id, title, description,
-      background{ ..., "alt": alt },
-      figure{ ..., "alt": alt },
-      linkLabel, linkHref
-    }
-  `);
+const BANNER_QUERY = `
+  *[_type == "banner" && active != false] | order(order asc) {
+    _id, title, description,
+    background{ ..., "alt": alt },
+    figure{ ..., "alt": alt },
+    linkLabel, linkHref
+  }
+`;
+
+export const getBanners = () => sanityClient.fetch<Banner[]>(BANNER_QUERY);
