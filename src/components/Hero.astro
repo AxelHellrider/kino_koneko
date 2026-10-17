@@ -27,6 +27,9 @@ const swiperOptions = {
                     <!-- fades from the status-bar color into the slide, hiding the seam under a gradient -->
                     <div aria-hidden="true"
                          class="pointer-events-none absolute inset-x-0 top-0 h-[calc(env(safe-area-inset-top)+4rem)] [background:linear-gradient(var(--band),transparent)] lg:hidden"></div>
+                    <!-- fades to white at the bottom so the translucent status bar over the next section reads white -->
+                    <div aria-hidden="true"
+                         class="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-b from-transparent to-white lg:hidden"></div>
                     <div data-hero-text class="relative flex flex-col gap-4 max-lg:text-center lg:grow">
                         <h1 class="retro-heading text-2xl lg:text-4xl">{b.title}</h1>
                         {b.description && <span class="font-semibold text-md">{b.description}</span>}
