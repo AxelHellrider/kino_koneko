@@ -7,21 +7,8 @@ import AskMe from '../components/AskMe.astro';
 import {getBanners} from '../lib/sanity';
 import {topEdgeColor} from '../lib/color';
 
-// Rendered on request so Sanity edits show up without a redeploy
-export const prerender = false;
-
-// The page takes no query params. Redirecting them away (before any Sanity call)
-// stops `?x=random` URLs from bypassing the CDN cache and hammering the origin.
-if (Astro.url.search) return Astro.redirect(Astro.url.pathname, 308);
-
-// Browsers always revalidate; Netlify's CDN serves the page for 60s, then
-// refreshes it in the background (and keeps serving the old copy if Sanity is down).
-Astro.response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
-Astro.response.headers.set(
-    'Netlify-CDN-Cache-Control',
-    'public, s-maxage=60, stale-while-revalidate=300, stale-if-error=86400',
-);
-
+// Static page: Sanity is queried at build time. A Sanity publish triggers a rebuild
+// (see .github/workflows/deploy.yml), which re-uploads the site.
 const banners = await getBanners();
 ---
 

@@ -1,15 +1,12 @@
 // @ts-check
 import {defineConfig, fontProviders} from 'astro/config';
 
-import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
 import sanity from "@sanity/astro";
 import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
-    // pages are static unless they set `prerender = false` (the home page does)
-    adapter: netlify(),
     security: {
         // hashes every inline script Astro emits; anything injected is blocked
         csp: {
@@ -38,7 +35,7 @@ export default defineConfig({
         sanity({
             projectId: "g1i4dle8",
             dataset: "production",
-            useCdn: true,
+            useCdn: false, // only queried at build time, so favour freshness over the CDN
             perspective: 'published',
             apiVersion: '2026-10-16'
         }),

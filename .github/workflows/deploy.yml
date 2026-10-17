@@ -1,0 +1,41 @@
+# Builds the Astro site and uploads dist/ to Hostinger over FTP(S).
+# Runs on every push to main, on demand, and when Sanity publishes content
+# (a Sanity webhook calls GitHub's repository_dispatch with event type "sanity-publish").
+name: Deploy site to Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['studio/**']
+  workflow_dispatch:
+  repository_dispatch:
+    types: [sanity-publish]
+
+# a burst of Sanity edits only needs the newest build
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./dist/
+          server-dir: ${{ vars.FTP_SERVER_DIR || '/public_html/' }}

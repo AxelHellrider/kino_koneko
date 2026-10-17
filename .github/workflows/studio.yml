@@ -1,0 +1,30 @@
+# Deploys the Sanity Studio (schema changes) when anything in studio/ changes.
+name: Deploy Sanity Studio
+
+on:
+  push:
+    branches: [main]
+    paths: ['studio/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  studio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
+      - run: npm ci
+      - run: npx sanity deploy
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
