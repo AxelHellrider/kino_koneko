@@ -23,8 +23,9 @@ export interface Product {
     _id: string;
     title: string;
     category: 'tee' | 'postcard' | 'poster' | 'sticker';
-    price: number;
+    main_artwork: any;
     description?: string;
+    order?: number;
     designs: Design[];
 }
 
@@ -33,7 +34,7 @@ export interface Product {
  */
 const PRODUCT_QUERY = `
   *[_type == "product"] | order(_createdAt desc) {
-    _id, title, category, price, description,
+    _id, title, category, main_artwork, description, order,
     designs[]{
       name, artwork, availability, availabilityNote,
       colorways[]{ colorName, colorHex, mockup, extraImages }

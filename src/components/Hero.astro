@@ -1,12 +1,14 @@
 ---
 import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
-import { getBanners, urlFor } from '../lib/sanity';
+import {getBanners, urlFor} from '../lib/sanity';
+import {colorVars} from '../lib/color';
+
 const banners = await getBanners();
 ---
 
 <div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0"
      id="top">
-    <Swiper class="mx-5! w-full h-full"
+    <Swiper class="w-full h-full"
             options={{
                 autoplay: {
                     delay: 7500
@@ -17,8 +19,10 @@ const banners = await getBanners();
             }}>
         <SwiperWrapper>
             {banners.map((b, i) => (
-                    <SwiperSlide class="flex! flex-row items-center">
-                        <div data-hero-text class="grow flex flex-col gap-4">
+                    <SwiperSlide style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
+                                 class="flex! flex-row items-center px-4 [background-image:var(--banner-bg)] [background:var(--banner-bg)]">
+                        <div data-hero-text
+                             class="grow flex flex-col gap-4">
                             <h1 class="font-black italic text-xl lg:text-4xl uppercase tracking-tight
                                                    text-shadow-[3px_3px_0_#DAB2FF]">
                                 {b.title}

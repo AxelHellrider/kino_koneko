@@ -1,14 +1,12 @@
 ---
-import {getProducts, urlFor} from "../lib/sanity.ts";
-import {Swiper, SwiperSlide, SwiperWrapper} from "astro-swiper";
-
+import { getProducts } from '../lib/sanity';
+import TarotCard from './TarotCard.astro';
 const products = await getProducts();
 ---
-<div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0"
-     id="designs">
-    {products.map((item) => (
-            <div>
-                {item.title} - {item.description}
-            </div>
-    ))}
-</div>
+
+<section id="designs" class="min-h-dvh p-4">
+    <div class="mx-auto flex max-w-6xl snap-x snap-mandatory gap-6 overflow-x-auto px-2 py-10
+              lg:grid lg:grid-cols-4 lg:gap-8 lg:overflow-auto">
+        {products.map((p, i) => <TarotCard product={p} index={i} eager={i === 0} />)}
+    </div>
+</section>
