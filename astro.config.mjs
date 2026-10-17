@@ -45,9 +45,11 @@ export default defineConfig({
     ],
     fonts: [
         {
-            name: "Rammetto One",
+            name: "Dela Gothic One",
             cssVariable: "--font-retro-pop",
-            provider: fontProviders.google(),
+            provider: fontProviders.fontsource(),
+            weights: ["400"],
+            subsets: ["latin", "latin-ext", "greek"],
             fallbacks: ["sans-serif"],
         },
     ],
