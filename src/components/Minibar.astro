@@ -9,18 +9,15 @@ const navMap = [
 ];
 ---
 
-<div class="fixed z-100 max-lg:m-auto max-lg:bottom-3 max-lg:left-1/2 max-lg:-translate-x-1/2 transition-all
-            lg:opacity-50 lg:-right-10 lg:hover:opacity-100 lg:hover:right-4 lg:top-1/2 lg:-translate-y-1/2">
-    <div class="rounded-full bg-pink-500/40 backdrop-blur-sm border border-pink-200 p-3
-                flex flex-row lg:flex-col gap-2">
-        {
-            navMap.map((item, index) =>
-                (
-                        <a href={item.anchor}>
-                            <Icon name={item.icon} aria-label={item.label} class="size-8 lg:hover:scale-110"></Icon>
-                        </a>
-                )
-            )
-        }
+<nav aria-label="Main"
+     class="fixed z-100 transition-all
+            max-lg:bottom-[max(0.75rem,env(safe-area-inset-bottom))] max-lg:left-1/2 max-lg:-translate-x-1/2
+            lg:top-1/2 lg:-right-10 lg:-translate-y-1/2 lg:opacity-50 lg:hover:right-4 lg:hover:opacity-100">
+    <div class="flex flex-row gap-2 rounded-full border border-pink-200 bg-pink-500/40 p-3 backdrop-blur-sm lg:flex-col">
+        {navMap.map(({icon, label, anchor}) => (
+            <a href={anchor} class="-m-1 p-1">
+                <Icon name={icon} aria-label={label} class="size-8 lg:hover:scale-110"/>
+            </a>
+        ))}
     </div>
-</div>
+</nav>

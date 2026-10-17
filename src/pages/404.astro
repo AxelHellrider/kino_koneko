@@ -1,37 +1,5 @@
 ---
-import {Font} from "astro:assets";
-import '../styles/global.css';
-import Minibar from "../components/Minibar.astro";
+import ErrorPage from '../components/ErrorPage.astro';
 ---
 
-<!doctype html>
-<html lang="en"
-      class="w-full h-full box-border p-0 m-0">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="user-scale=none;width=device-width"/>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-    <link rel="icon" href="/favicon.ico"/>
-    <meta name="generator" content={Astro.generator}/>
-    <Font cssVariable="--font-retro-pop"/>
-    <title>No page found! - Kino Koneko</title>
-</head>
-<body class="box-border p-0 m-0 w-full h-full overflow-hidden">
-<div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0">
-    <div class="p-3 w-full group flex flex-row items-center">
-        <div class="grow flex flex-col items-center gap-2">
-            <h1 class="font-black italic text-xl lg:text-[70px] uppercase tracking-tight text-shadow-[3px_3px_0_#DAB2FF]">
-                404
-            </h1>
-            <span class="font-semibold text-md">Page not found!</span>
-        </div>
-        <!-- todo: Animate the figure's position from right to left -->
-        <img class="shrink-0 grow-0"
-             src="/sailor_moon_stock_art.png"
-             alt="Sailor Moon">
-    </div>
-</div>
-
-<Minibar></Minibar>
-</body>
-</html>
+<ErrorPage code={404} title="No page found!">Page not found!</ErrorPage>

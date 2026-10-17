@@ -4,40 +4,34 @@ import {getBanners, urlFor} from '../lib/sanity';
 import {colorVars} from '../lib/color';
 
 const banners = await getBanners();
+const swiperOptions = {
+    autoplay: {delay: 7500},
+    keyboard: false,
+    cssMode: true,
+    resizeObserver: true,
+};
 ---
 
-<div class="w-full h-dvh text-xl flex flex-row items-center scroll-smooth scroll-mt-0"
-     id="top">
-    <Swiper class="w-full h-full"
-            options={{
-                autoplay: {
-                    delay: 7500
-                },
-                keyboard: false,
-                cssMode: true,
-                resizeObserver: true
-            }}>
+<section id="top" class="h-dvh w-full text-xl">
+    <Swiper class="size-full" options={swiperOptions}>
         <SwiperWrapper>
             {banners.map((b, i) => (
-                    <SwiperSlide style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
-                                 class="flex! flex-row items-center px-4 [background-image:var(--banner-bg)] [background:var(--banner-bg)]">
-                        <div data-hero-text
-                             class="grow flex flex-col gap-4">
-                            <h1 class="font-black italic text-xl lg:text-4xl uppercase tracking-tight
-                                                   text-shadow-[3px_3px_0_#DAB2FF]">
-                                {b.title}
-                            </h1>
-                            {b.description && <span class="font-semibold text-md">{b.description}</span>}
-                            {b.linkHref && <a href={b.linkHref}>{b.linkLabel ?? 'Take a look'}</a>}
-                        </div>
-                        <img data-hero-figure
-                             src={urlFor(b.figure).format('webp').url()}
-                             alt={b.figure.alt}
-                             loading={i === 0 ? 'eager' : 'lazy'}
-                             fetchpriority={i === 0 ? 'high' : 'auto'}
-                             class="shrink-0 grow-0">
-                    </SwiperSlide>
+                <SwiperSlide style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
+                             class="flex! flex-col items-center justify-center gap-4 px-4 pb-24 [background:var(--banner-bg)]
+                                    lg:flex-row lg:pb-0">
+                    <div data-hero-text class="flex flex-col gap-4 max-lg:text-center lg:grow">
+                        <h1 class="retro-heading text-2xl lg:text-4xl">{b.title}</h1>
+                        {b.description && <span class="font-semibold text-md">{b.description}</span>}
+                        {b.linkHref && <a href={b.linkHref}>{b.linkLabel ?? 'Take a look'}</a>}
+                    </div>
+                    <img data-hero-figure
+                         src={urlFor(b.figure).format('webp').url()}
+                         alt={b.figure.alt}
+                         loading={i === 0 ? 'eager' : 'lazy'}
+                         fetchpriority={i === 0 ? 'high' : 'auto'}
+                         class="shrink-0 object-contain max-lg:max-h-[45dvh] max-lg:w-auto max-lg:max-w-full">
+                </SwiperSlide>
             ))}
         </SwiperWrapper>
     </Swiper>
-</div>
+</section>
