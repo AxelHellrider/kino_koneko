@@ -15,7 +15,6 @@ export const product = defineType({
             type: 'string',
             options: {list: ['tee', 'postcard', 'poster', 'sticker']}
         },
-        {name: 'price', type: 'number'},
         {name: 'description', type: 'text'},
         {
             name: 'main_artwork',
@@ -62,5 +61,6 @@ export const product = defineType({
                 ],
             }]
         },
+        {name: 'order', type: 'number'},
     ],
 });

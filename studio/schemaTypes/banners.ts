@@ -1,4 +1,3 @@
-// studio/schemaTypes/banner.ts
 import { defineType, defineField } from 'sanity';
 
 export const banner = defineType({
@@ -14,7 +13,7 @@ export const banner = defineType({
             options: { hotspot: true },
             fields: [
                 defineField({ name: 'alt', type: 'string', title: 'Alt text' }),
-                defineField({ name: 'colorPick', type: 'color', title: 'Color Pick'})
+                defineField({ name: 'color', type: 'color', title: 'Color Pick'})
             ],
         }),
         defineField({
