@@ -39,9 +39,10 @@ export const initDeck = (root: HTMLElement) => {
             opacity: 0,
             duration: 0.5,
             ease: 'back.out(1.4)',
-            clearProps: 'all',
+            // only drop what GSAP set; the card's inline --c1/--c2/--tilt vars must stay
+            clearProps: 'transform,opacity',
         });
-        gsap.fromTo(top, {y: 4}, {y: 0, duration: 0.25, ease: 'power2.out', clearProps: 'all'});
+        gsap.fromTo(top, {y: 4}, {y: 0, duration: 0.25, ease: 'power2.out', clearProps: 'transform'});
     };
 
     const draw = () => {

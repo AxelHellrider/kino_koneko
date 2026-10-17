@@ -1,9 +1,13 @@
 ---
 import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
-import {getBanners, urlFor} from '../lib/sanity';
+import {urlFor, type Banner} from '../lib/sanity';
 import {colorVars} from '../lib/color';
+import {safeHref} from '../lib/safe';
 
-const banners = await getBanners();
+interface Props {
+    banners: Banner[];
+}
+const {banners} = Astro.props;
 const swiperOptions = {
     autoplay: {delay: 7500},
     keyboard: false,
@@ -22,7 +26,7 @@ const swiperOptions = {
                     <div data-hero-text class="flex flex-col gap-4 max-lg:text-center lg:grow">
                         <h1 class="retro-heading text-2xl lg:text-4xl">{b.title}</h1>
                         {b.description && <span class="font-semibold text-md">{b.description}</span>}
-                        {b.linkHref && <a href={b.linkHref}>{b.linkLabel ?? 'Take a look'}</a>}
+                        {safeHref(b.linkHref) && <a href={safeHref(b.linkHref)}>{b.linkLabel ?? 'Take a look'}</a>}
                     </div>
                     <img data-hero-figure
                          src={urlFor(b.figure).format('webp').url()}

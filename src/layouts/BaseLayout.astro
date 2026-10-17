@@ -5,23 +5,29 @@ import Minibar from "../components/Minibar.astro";
 
 interface Props {
     title?: string;
+    /** Tints the mobile browser's status bar area; also the page background behind it. */
+    themeColor?: string;
 }
-const {title = 'Kino Koneko'} = Astro.props;
+const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="h-full motion-safe:scroll-smooth">
+<html lang="en" class="overflow-hidden overscroll-none" style={`background:${themeColor}`}>
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta name="theme-color" content={themeColor}/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <link rel="icon" href="/favicon.ico"/>
     <meta name="generator" content={Astro.generator}/>
     <Font cssVariable="--font-retro-pop"/>
     <title>{title}</title>
 </head>
-<body class="h-full overflow-x-clip">
+<body class="h-dvh overflow-hidden overscroll-none">
 <Minibar/>
-<slot/>
+<!-- The page can't be scrolled by hand: this container only moves when a Minibar link is used -->
+<main class="h-dvh overflow-y-hidden motion-safe:scroll-smooth">
+    <slot/>
+</main>
 </body>
 </html>
