@@ -23,10 +23,10 @@ const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
     <Font cssVariable="--font-retro-pop"/>
     <title>{title}</title>
 </head>
-<body class="h-dvh overflow-hidden overscroll-none">
+<body class="fixed inset-0 overflow-hidden overscroll-none">
 <Minibar/>
 <!-- The page can't be scrolled by hand: this container only moves when a Minibar link is used -->
-<main class="h-dvh overflow-y-hidden motion-safe:scroll-smooth">
+<main class="h-full overflow-y-hidden motion-safe:scroll-smooth">
     <slot/>
 </main>
 </body>

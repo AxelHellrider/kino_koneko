@@ -10,8 +10,8 @@ const deckCard = 'absolute inset-0 rounded-2xl border-[3px] border-ink';
 const deckLayer = `${deckCard} bg-[#CDB4FF]`;
 ---
 
-<Section id="designs" class="flex-col items-center gap-6 overflow-y-auto overscroll-contain pt-10">
-    <h2 class="retro-heading text-2xl lg:text-3xl">Pick a card</h2>
+<Section id="designs" class="flex-col items-center gap-6 overflow-y-auto overscroll-contain">
+    <h2 class="retro-heading mt-6 text-2xl lg:text-3xl">Pick a card</h2>
 
     {products.length > 0 && (
         <div data-deck-root class="flex w-full max-w-6xl flex-col items-center gap-8">

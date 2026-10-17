@@ -16,12 +16,12 @@ const swiperOptions = {
 };
 ---
 
-<section id="top" class="h-dvh w-full text-xl">
+<section id="top" class="h-full w-full text-xl">
     <Swiper class="size-full" options={swiperOptions}>
         <SwiperWrapper>
             {banners.map((b, i) => (
                 <SwiperSlide style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
-                             class="flex! flex-col items-center justify-center gap-4 px-4 pb-24 [background:var(--banner-bg)]
+                             class="flex! flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top)] pb-24 [background:var(--banner-bg)]
                                     lg:flex-row lg:pb-0">
                     <div data-hero-text class="flex flex-col gap-4 max-lg:text-center lg:grow">
                         <h1 class="retro-heading text-2xl lg:text-4xl">{b.title}</h1>
