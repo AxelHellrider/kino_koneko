@@ -5,7 +5,7 @@ import About from '../components/About.astro';
 import Showcase from '../components/Showcase.astro';
 import AskMe from '../components/AskMe.astro';
 import {getBanners} from '../lib/sanity';
-import {safeHex} from '../lib/color';
+import {topEdgeColor} from '../lib/color';
 
 // Rendered on request so Sanity edits show up without a redeploy
 export const prerender = false;
@@ -25,7 +25,7 @@ Astro.response.headers.set(
 const banners = await getBanners();
 ---
 
-<BaseLayout themeColor={safeHex(banners[0]?.background?.color)}>
+<BaseLayout themeColor={topEdgeColor(banners[0]?.background?.color)}>
     <Hero banners={banners}/>
     <About/>
     <Showcase/>

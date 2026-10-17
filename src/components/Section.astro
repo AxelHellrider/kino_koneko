@@ -7,6 +7,6 @@ const {id, class: className} = Astro.props;
 ---
 
 <!-- bottom padding on mobile keeps content clear of the floating Minibar -->
-<section id={id} class:list={['flex h-full px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 text-xl lg:pb-4', className]}>
+<section id={id} data-theme-color="#ffffff" class:list={['flex h-full bg-white px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 text-xl lg:pb-4', className]}>
     <slot/>
 </section>

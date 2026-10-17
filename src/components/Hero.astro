@@ -1,7 +1,7 @@
 ---
 import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
 import {urlFor, type Banner} from '../lib/sanity';
-import {colorVars} from '../lib/color';
+import {colorVars, topEdgeColor} from '../lib/color';
 import {safeHref} from '../lib/safe';
 
 interface Props {
@@ -20,7 +20,8 @@ const swiperOptions = {
     <Swiper class="size-full" options={swiperOptions}>
         <SwiperWrapper>
             {banners.map((b, i) => (
-                <SwiperSlide style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
+                <SwiperSlide data-theme-color={topEdgeColor(b.background?.color) ?? '#ffffff'}
+                             style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}
                              class="flex! flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top)] pb-24 [background:var(--banner-bg)]
                                     lg:flex-row lg:pb-0">
                     <div data-hero-text class="flex flex-col gap-4 max-lg:text-center lg:grow">

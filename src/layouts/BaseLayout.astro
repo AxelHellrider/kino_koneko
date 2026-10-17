@@ -29,5 +29,10 @@ const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
 <main class="h-full overflow-y-hidden motion-safe:scroll-smooth">
     <slot/>
 </main>
+<script>
+    import {initThemeColor} from '../scripts/theme';
+
+    initThemeColor();
+</script>
 </body>
 </html>
