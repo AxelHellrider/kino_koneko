@@ -18,7 +18,7 @@ const swiperOptions = {
 
 <section id="top" class="h-full w-full text-xl">
     <Swiper class="size-full" options={swiperOptions}>
-        <SwiperWrapper>
+        <SwiperWrapper class="touch-pan-x">
             {banners.map((b, i) => (
                 <SwiperSlide data-theme-color={topEdgeColor(b.background?.color) ?? '#ffffff'}
                              style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}`}

@@ -12,7 +12,7 @@ const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="overflow-hidden overscroll-none" style={`background:${themeColor}`}>
+<html lang="en" class="h-full touch-pan-x overscroll-none motion-safe:scroll-smooth lg:touch-auto lg:overflow-hidden" style={`background:${themeColor}`}>
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
@@ -23,10 +23,11 @@ const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
     <Font cssVariable="--font-retro-pop"/>
     <title>{title}</title>
 </head>
-<body class="fixed inset-0 overflow-hidden overscroll-none">
+<body class="h-full lg:fixed lg:inset-0 lg:overflow-hidden">
 <Minibar/>
-<!-- The page can't be scrolled by hand: this container only moves when a Minibar link is used -->
-<main class="h-full overflow-y-hidden motion-safe:scroll-smooth">
+<!-- No hand-scrolling: on touch screens `touch-pan-x` (html) blocks vertical swipes, on desktop the
+     page is locked outright. Either way it only moves when a Minibar link is used. -->
+<main class="h-full lg:overflow-y-hidden lg:motion-safe:scroll-smooth">
     <slot/>
 </main>
 <script>
