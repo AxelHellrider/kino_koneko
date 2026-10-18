@@ -1,0 +1,125 @@
+---
+import type {Banner} from '../lib/sanity';
+import {colorVars, leftEdgeColor, topEdgeColor} from '../lib/color';
+import {safeHref} from '../lib/safe';
+import {backdropSize, bannerTextVars, buttonShape, buttonTheme, buttonVars, figureLayout, figureMotion, posterColors, titleLines} from '../lib/banner';
+import {presetOf, themeOf} from '../lib/themes';
+import HeroButton from './HeroButton.astro';
+
+interface Props {
+    banner: Banner;
+    index: number;
+    total: number;
+    /** resolved image URLs (src, plus srcset when responsive) */
+    figure: {src: string; srcset?: string};
+    eager?: boolean;
+}
+const {banner: b, index: i, total, figure, eager = false} = Astro.props;
+
+const theme = themeOf(b);
+const poster = b.layout === 'poster';
+const href = safeHref(b.linkHref);
+const lines = titleLines(b.title);
+const layout = figureLayout(b);
+const Heading = i === 0 ? 'h1' : 'h2'; // only one h1 per page
+
+// Poster layout: where the figure stands. The text block takes the other side.
+const pos = ['left', 'right'].includes(b.posterFigure as string) ? (b.posterFigure as 'left' | 'right') : 'center';
+
+const bg = colorVars(b.background?.color);
+const status = topEdgeColor(b.background?.color) ?? presetOf(b)?.status ?? '#ffffff';
+const style = [
+    bg && `--banner-bg:${bg}`,
+    `--band:${status}`,
+    `--edge:${leftEdgeColor(b.background?.color) ?? presetOf(b)?.edge ?? 'transparent'}`,
+    bannerTextVars(b),
+    poster && posterColors(b),
+    // horizontal position of the figure on desktop, so theme decoration can sit behind it
+    `--fx-d:${poster ? {left: '22%', center: '50%', right: '78%'}[pos] : layout.desktopSide === 'left' ? '22%' : '78%'}`,
+].filter(Boolean).join(';');
+
+const accentLine = poster ? b.titleAccentLine : undefined;
+
+const posterClass = {
+    figure: {
+        left: 'left-[2%] lg:left-[10%]',
+        center: 'left-1/2 -translate-x-1/2',
+        right: 'right-[2%] lg:right-[10%]',
+    }[pos],
+    info: pos === 'left' ? 'lg:inset-x-auto lg:right-14' : 'lg:inset-x-auto lg:left-14',
+    side: pos === 'left' ? 'left-3 lg:left-14' : 'right-3 lg:right-14',
+};
+const figureAttrs = {
+    // an automatic slide-in comes from the figure's own side (below, for a centered poster figure)
+    ...figureMotion(b, poster ? (pos === 'center' ? 'bottom' : pos) : layout.desktopSide),
+    ...figure,
+    alt: b.figure.alt,
+    loading: eager ? 'eager' : 'lazy',
+    fetchpriority: eager ? 'high' : 'auto',
+};
+---
+
+<div role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${total}`}
+     data-anim-group data-theme-color={status} data-theme={theme} data-layout={poster ? 'poster' : 'split'}
+     style={style}
+     class:list={[
+         'swiper-slide hero-slide relative overflow-hidden',
+         poster ? '' : 'flex! flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top)] pb-24 lg:flex-row lg:px-14 lg:pb-0',
+         poster ? '' : layout.slide,
+     ]}>
+    <!-- fades from the status-bar color into the slide, hiding the seam under a gradient -->
+    <div aria-hidden="true"
+         class="pointer-events-none absolute inset-x-0 top-0 z-30 h-[calc(env(safe-area-inset-top)+4rem)] [background:linear-gradient(var(--band),transparent)] lg:hidden"></div>
+
+    {theme !== 'none' && (
+        <div aria-hidden="true" class="hero-decor pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            <span></span><span></span><span></span>
+        </div>
+    )}
+
+    {poster ? (
+        <>
+            {b.backdropText && (
+                <div aria-hidden="true" data-anim="backdrop" class="hero-backdrop"
+                     style={`font-size:${backdropSize(b.backdropText)}vw`}>{b.backdropText}</div>
+            )}
+            <img data-hero-figure {...figureAttrs}
+                 sizes="(max-width: 1024px) 100vw, 60vw"
+                 class:list={['absolute bottom-14 z-10 h-[68%] max-w-none object-contain lg:bottom-0 lg:h-[90%]', posterClass.figure]}>
+            <div aria-hidden="true" class="hero-scrim pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-1/2"></div>
+            {b.sideText && (
+                <div aria-hidden="true" class:list={['hero-side absolute top-[44%] z-20 [writing-mode:vertical-rl] text-xs tracking-[0.4em] [color:var(--body-color,inherit)] lg:text-sm', posterClass.side]}>
+                    {b.sideText}
+                </div>
+            )}
+            <span aria-hidden="true" class="hero-corner absolute bottom-24 right-4 z-20 size-5 border-b-2 border-r-2 border-current opacity-70 lg:bottom-8 lg:right-8"></span>
+            <span aria-hidden="true" class="hero-corner absolute right-4 top-24 z-20 size-5 border-r-2 border-t-2 border-current opacity-70 lg:right-8 lg:top-8"></span>
+
+            <div data-hero-text class:list={['absolute inset-x-5 bottom-28 z-20 flex flex-col items-start gap-3 lg:bottom-14 lg:w-[27rem]', posterClass.info]}>
+                {b.tags && b.tags.length > 0 && (
+                    <ul class="flex gap-2 text-[10px] font-black uppercase tracking-[0.25em] [color:var(--body-color,inherit)]">
+                        {b.tags.slice(0, 2).map((t) => <li data-anim="text" class="border border-current px-2 py-0.5">{t}</li>)}
+                    </ul>
+                )}
+                <Heading data-anim="text" class="retro-heading hero-title text-3xl leading-[0.95] lg:text-5xl">
+                    {lines.map((l, n) => <span class="block" data-accent={accentLine === n + 1 ? '' : undefined}>{l}</span>)}
+                </Heading>
+                {b.description && <p data-anim="text" class="hero-body max-w-[26ch] text-sm font-semibold lg:text-base [color:var(--body-color,inherit)]">{b.description}</p>}
+                {href && <HeroButton data-anim="text" class="max-lg:self-start!" href={href} shape={buttonShape(b)} theme={buttonTheme(b)} style={buttonVars(b)}>{b.linkLabel ?? 'Take a look'}</HeroButton>}
+            </div>
+        </>
+    ) : (
+        <>
+            <div data-hero-text class="relative z-10 flex flex-col gap-4 max-lg:items-center max-lg:text-center lg:max-w-xl lg:grow lg:items-start">
+                <Heading data-anim="text" class="retro-heading hero-title text-2xl lg:text-4xl">
+                    {lines.map((l) => <span class="block">{l}</span>)}
+                </Heading>
+                {b.description && <p data-anim="text" class="hero-body font-semibold text-md [color:var(--body-color,inherit)]">{b.description}</p>}
+                {href && <HeroButton data-anim="text" href={href} shape={buttonShape(b)} theme={buttonTheme(b)} style={buttonVars(b)}>{b.linkLabel ?? 'Take a look'}</HeroButton>}
+            </div>
+            <img data-hero-figure {...figureAttrs}
+                 sizes="(max-width: 1024px) 80vw, 40vw"
+                 class:list={['relative z-10 shrink-0 object-contain max-lg:max-h-[45dvh] max-lg:w-auto max-lg:max-w-full', layout.figure]}>
+        </>
+    )}
+</div>

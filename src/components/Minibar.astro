@@ -9,15 +9,31 @@ const navMap = [
 ];
 ---
 
+<!--
+  Mobile: a floating bar at the bottom.
+  Desktop: parked off-screen to the right with only the "MENU" ribbon showing. It slides out on
+  hover or keyboard focus (focus-within), so the links stay reachable without a mouse.
+-->
 <nav aria-label="Main"
-     class="fixed z-100 transition-[right,opacity]
+     class="fixed z-100
             max-lg:bottom-[max(0.75rem,env(safe-area-inset-bottom))] max-lg:left-1/2 max-lg:-translate-x-1/2 max-lg:w-[min(21rem,calc(100vw-2rem))]
-            lg:top-1/2 lg:-right-10 lg:-translate-y-1/2 lg:opacity-50 lg:hover:right-4 lg:hover:opacity-100">
-    <div class="flex flex-row gap-2 max-lg:justify-around rounded-full border border-pink-200 bg-white/50 p-3 backdrop-blur-sm lg:flex-col">
+            lg:top-1/2 lg:right-0 lg:flex lg:items-stretch lg:-translate-y-1/2 lg:translate-x-[calc(100%-2rem)]
+            lg:rounded-3xl lg:border lg:border-pink-200 lg:bg-white/90 lg:backdrop-blur-sm
+            lg:transition-transform lg:duration-300 lg:ease-out motion-reduce:transition-none
+            lg:hover:-translate-x-3 lg:focus-within:-translate-x-3">
+    <!-- decorative: the links are what assistive tech reads. Part of the same panel, tinted so it reads as a handle. -->
+    <span aria-hidden="true"
+          class="max-lg:hidden flex w-8 shrink-0 items-center justify-center rounded-l-[calc(1.5rem-1px)] bg-lilac-purple/40 py-4
+                 text-[11px] font-black tracking-[0.3em] text-ink [writing-mode:vertical-rl]">
+        MENU
+    </span>
+    <ul class="flex flex-row gap-2 max-lg:justify-around max-lg:rounded-full max-lg:border max-lg:border-pink-200 max-lg:bg-white/70 max-lg:p-3 max-lg:backdrop-blur-sm lg:flex-col lg:p-3">
         {navMap.map(({icon, label, anchor}) => (
-            <a href={anchor} class="-m-1 p-1">
-                <Icon name={icon} aria-label={label} class="size-8 lg:hover:scale-110"/>
-            </a>
+            <li>
+                <a href={anchor} aria-label={label} class="-m-1.5 block rounded-full p-1.5">
+                    <Icon name={icon} aria-hidden="true" focusable="false" class="size-8 lg:hover:scale-110"/>
+                </a>
+            </li>
         ))}
-    </div>
+    </ul>
 </nav>

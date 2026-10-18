@@ -1,0 +1,44 @@
+---
+import type {ButtonShape} from '../lib/banner';
+import type {Theme} from '../lib/themes';
+
+interface Props {
+    href: string;
+    shape?: ButtonShape;
+    /** which theme's colors, outline and shadow the button wears */
+    theme?: Theme;
+    class?: string;
+}
+const {href, shape = 'semi', theme = 'none', class: className, ...rest} = Astro.props;
+
+// Colors come from the banner's --btn-bg / --btn-fg (white fill, ink text by default); themes also set
+// --btn-outline and --btn-shadow so the whole button matches the theme.
+// Class names are written out in full so Tailwind can see them.
+const edged = {
+    classic: 'rounded-none',
+    semi: 'rounded-lg',
+    rounded: 'rounded-full',
+};
+const label = 'px-7 py-2 text-sm font-black uppercase tracking-wide [color:var(--btn-fg,var(--color-ink))]';
+// "action" = slanted shape: two stacked clip-path polygons (ink outline, colored face) plus a hard
+// offset shadow, in the spirit of The World Ends With You's UI. clip-path keeps the label upright.
+const lift = 'transition-transform duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 motion-reduce:transition-none';
+---
+
+{shape === 'action' ? (
+    <span data-btn-theme={theme} class:list={['hero-btn inline-block w-fit max-lg:self-center [filter:drop-shadow(4px_4px_0_var(--btn-shadow,var(--color-ink)))]', lift, className]} {...rest}>
+        <a href={href}
+           class="block min-h-11 p-[3px] [background:var(--btn-outline,var(--color-ink))] [clip-path:polygon(8%_0,100%_0,92%_100%,0_100%)]">
+            <span class:list={['flex min-h-[calc(2.75rem-6px)] items-center justify-center italic bg-(--btn-bg,var(--color-white)) [clip-path:polygon(8%_0,100%_0,92%_100%,0_100%)] px-9', label]}>
+                <slot/>
+            </span>
+        </a>
+    </span>
+) : (
+    <span data-btn-theme={theme} class:list={['hero-btn inline-block w-fit max-lg:self-center', lift, className]} {...rest}>
+        <a href={href}
+           class:list={['flex min-h-11 items-center justify-center border-2 [border-color:var(--btn-outline,var(--color-ink))] bg-(--btn-bg,var(--color-white)) shadow-[3px_3px_0_var(--btn-shadow,var(--color-ink))]', edged[shape], label]}>
+            <slot/>
+        </a>
+    </span>
+)}

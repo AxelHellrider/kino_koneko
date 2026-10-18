@@ -10,15 +10,15 @@ const deckCard = 'absolute inset-0 rounded-2xl border-[3px] border-ink';
 const deckLayer = `${deckCard} bg-[#CDB4FF]`;
 ---
 
-<Section id="designs" class="flex-col items-center gap-6 overflow-y-auto overscroll-contain touch-pan-y">
-    <h2 class="retro-heading mt-6 text-2xl lg:text-3xl">Pick a card</h2>
+<Section id="designs" label="Designs" class="flex-col items-center gap-6 overflow-y-auto overscroll-contain touch-pan-y">
+    <h2 data-anim="text" class="retro-heading mt-6 text-2xl lg:text-3xl">Pick a card</h2>
 
     {products.length > 0 && (
         <div data-deck-root class="flex w-full max-w-6xl flex-col items-center gap-8">
 
             <!-- the deck -->
-            <div class="flex flex-col items-center gap-3">
-                <button type="button" data-deck-btn
+            <div data-anim="text" class="flex flex-col items-center gap-3">
+                <button type="button" data-deck-btn aria-labelledby="deck-label"
                         class="group relative aspect-[2/3] w-28 touch-manipulation sm:w-36
                                focus-visible:outline-4 focus-visible:outline-offset-8 focus-visible:outline-ink">
                     <span data-deck-layer class:list={[deckLayer, 'translate-1.5']}></span>
@@ -32,8 +32,10 @@ const deckLayer = `${deckCard} bg-[#CDB4FF]`;
                     </span>
                 </button>
                 <p class="text-center text-sm font-semibold">
-                    <span data-deck-label>Tap the deck to draw a card</span>
-                    <span class="block text-xs opacity-70" data-deck-count aria-live="polite"></span>
+                    <span id="deck-label" data-deck-label>Tap the deck to draw a card</span>
+                    <span class="block text-xs opacity-70" data-deck-count></span>
+                    <!-- announced to screen readers when a card is drawn -->
+                    <span class="sr-only" role="status" data-deck-status></span>
                 </p>
             </div>
 

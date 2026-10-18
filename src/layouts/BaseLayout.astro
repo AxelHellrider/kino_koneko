@@ -24,16 +24,24 @@ const {title = 'Kino Koneko', themeColor = '#ffffff'} = Astro.props;
     <title>{title}</title>
 </head>
 <body class="h-full lg:fixed lg:inset-0 lg:overflow-hidden">
+<a href="#content"
+   class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-200 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:font-black focus:text-ink">
+    Skip to content
+</a>
 <Minibar/>
 <!-- No hand-scrolling: on touch screens `touch-pan-x` (html) blocks vertical swipes, on desktop the
      page is locked outright. Either way it only moves when a Minibar link is used. -->
-<main class="h-full lg:overflow-y-hidden lg:motion-safe:scroll-smooth">
+<main id="content" tabindex="-1" class="outline-none h-full lg:overflow-y-hidden lg:motion-safe:scroll-smooth">
     <slot/>
 </main>
 <script>
     import {initThemeColor} from '../scripts/theme';
+    import {initMotion} from '../scripts/motion';
+    import {initCarousel} from '../scripts/carousel';
 
     initThemeColor();
+    initMotion();
+    initCarousel();
 </script>
 </body>
 </html>

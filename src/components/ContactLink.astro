@@ -13,4 +13,5 @@ const external = href.startsWith('http');
    class:list={['font-black underline decoration-2 underline-offset-4 break-all', className]}
    {...rest}>
     <slot/>
+    {external && <span class="sr-only"> (opens in a new tab)</span>}
 </a>

@@ -1,0 +1,331 @@
+/*
+ * Banner themes. Each theme is a set of defaults keyed by `data-theme` on the slide; anything a
+ * banner sets explicitly in Sanity (--title-color, ...) is an inline style and wins.
+ * Everything here is static CSS (no JS, no extra fonts), and decoration sits on its own layer
+ * (.hero-decor) so it never affects layout.
+ */
+
+.hero-slide {
+    background: var(--banner-bg, var(--theme-bg, transparent));
+}
+
+/* With a fractional display scale the browser can snap the carousel's scroll position by part of a
+   pixel, letting the previous slide's edge peek out as a thin line. A hard shadow just outside this
+   slide's left edge, in its own edge color, covers it. */
+.hero-slide {
+    box-shadow: -3px 0 0 0 var(--edge, transparent);
+}
+
+/* ---------- shared: poster layout ---------- */
+
+/* the giant word behind the figure */
+.hero-backdrop {
+    position: absolute;
+    inset-inline: 0;
+    top: 29%;
+    z-index: 1;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--backdrop-color, color-mix(in srgb, currentColor 22%, transparent));
+}
+
+@media (min-width: 1024px) {
+    .hero-backdrop {
+        top: 14%;
+    }
+}
+
+.hero-scrim {
+    background: linear-gradient(transparent, var(--scrim, rgb(0 0 0 / 0.45)));
+}
+
+/* the poster layout has no default title shadow (themes and banners can still set one) */
+[data-layout='poster'] {
+    --title-shadow: transparent;
+}
+
+/* themed titles are a little bigger on phones */
+@media (max-width: 1023px) {
+    [data-theme]:not([data-theme='none']) .hero-title {
+        font-size: clamp(2.25rem, 10vw, 3.25rem);
+        line-height: 1;
+    }
+}
+
+/* a highlighted title line (poster layout) */
+.hero-title [data-accent] {
+    color: var(--title-accent, inherit);
+}
+
+/* ---------- TWEWY: street-pop, hot orange and pink, thick outlines ---------- */
+
+[data-theme='twewy'] {
+    --theme-bg: linear-gradient(135deg, #ff8a1f 0%, #ff2d8f 100%);
+    --title-color: #fff;
+    --title-shadow: #111;
+    --body-color: #111;
+    --scrim: transparent;
+}
+
+[data-theme='twewy'] .hero-title {
+    text-transform: uppercase;
+    -webkit-text-stroke: 6px #111;
+    paint-order: stroke fill;
+    transform: rotate(-4deg);
+    transform-origin: left center;
+}
+
+[data-theme='twewy'] .hero-body {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: #fff;
+    clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
+}
+
+/* diagonal slash, halftone dots, and a pin-badge star */
+[data-theme='twewy'] .hero-decor span:nth-child(1) {
+    position: absolute;
+    inset: 0;
+    background: rgb(255 255 255 / 0.22);
+    clip-path: polygon(34% 0, 62% 0, 36% 100%, 8% 100%);
+}
+
+[data-theme='twewy'] .hero-decor span:nth-child(2) {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(#111 24%, transparent 26%) 0 0 / 14px 14px;
+    opacity: 0.16;
+    mask-image: linear-gradient(to bottom right, transparent 30%, #000);
+}
+
+[data-theme='twewy'] .hero-decor span:nth-child(3) {
+    position: absolute;
+    right: 6%;
+    top: 12%;
+    width: clamp(3.5rem, 12vw, 7rem);
+    aspect-ratio: 1;
+    background: #ffe600;
+    clip-path: polygon(50% 0, 61% 30%, 93% 20%, 72% 47%, 100% 62%, 66% 68%, 69% 100%, 50% 77%, 31% 100%, 34% 68%, 0 62%, 28% 47%, 7% 20%, 39% 30%);
+    transform: rotate(14deg);
+}
+
+/* ---------- Persona 5: red and black, jagged, slanted ---------- */
+
+[data-theme='persona5'] {
+    --theme-bg: #e60012;
+    --title-color: #fff;
+    --body-color: #fff;
+    --scrim: transparent;
+}
+
+[data-theme='persona5'] .hero-title {
+    text-transform: uppercase;
+    text-shadow: none;
+    transform: rotate(-4deg) skewX(-10deg);
+    transform-origin: left center;
+}
+
+[data-theme='persona5'] .hero-title > span {
+    display: table;
+    margin-bottom: 0.12em;
+    padding: 0.04em 0.4em;
+    background: #000;
+    box-shadow: 0.08em 0.08em 0 #fff;
+}
+
+[data-theme='persona5'] .hero-body {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: #000;
+    transform: skewX(-10deg);
+}
+
+[data-theme='persona5'] .hero-decor span {
+    position: absolute;
+    inset: 0;
+}
+
+[data-theme='persona5'] .hero-decor span:nth-child(1) {
+    background: #000;
+    clip-path: polygon(0 60%, 58% 78%, 44% 100%, 0 100%);
+}
+
+[data-theme='persona5'] .hero-decor span:nth-child(2) {
+    background: #000;
+    clip-path: polygon(100% 0, 100% 30%, 52% 14%, 64% 0);
+}
+
+[data-theme='persona5'] .hero-decor span:nth-child(3) {
+    background: #fff;
+    clip-path: polygon(0 74%, 100% 40%, 100% 42%, 0 76%);
+    opacity: 0.9;
+}
+
+/* ---------- Marvel / DC comics: halftone, primary colors, speech bubbles ---------- */
+
+[data-theme='comic'] {
+    --theme-bg: #ffd400;
+    --title-color: #fff;
+    --title-shadow: #111;
+    --body-color: #111;
+    --scrim: transparent;
+}
+
+[data-theme='comic'] .hero-title {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    -webkit-text-stroke: 5px #111;
+    paint-order: stroke fill;
+    transform: rotate(-3deg);
+    transform-origin: left center;
+}
+
+/* speech bubble with a tail */
+[data-theme='comic'] .hero-body {
+    position: relative;
+    display: inline-block;
+    padding: 0.6rem 0.9rem;
+    background: #fff;
+    border: 3px solid #111;
+    border-radius: 1.2rem;
+    box-shadow: 4px 4px 0 #111;
+}
+
+[data-theme='comic'] .hero-body::after {
+    content: '';
+    position: absolute;
+    bottom: -0.65rem;
+    left: 1.6rem;
+    width: 1rem;
+    height: 1rem;
+    background: #fff;
+    border-right: 3px solid #111;
+    border-bottom: 3px solid #111;
+    transform: rotate(45deg);
+}
+
+/* halftone dots + a starburst behind the figure */
+[data-theme='comic'] .hero-decor span {
+    position: absolute;
+}
+
+[data-theme='comic'] .hero-decor span:nth-child(1) {
+    inset: 0;
+    background: radial-gradient(#e62429 28%, transparent 30%) 0 0 / 15px 15px;
+    opacity: 0.55;
+    mask-image: radial-gradient(ellipse at 80% 20%, #000, transparent 70%);
+}
+
+[data-theme='comic'] .hero-decor span:nth-child(2),
+[data-theme='comic'] .hero-decor span:nth-child(3) {
+    left: 50%;
+    top: 50%;
+    width: 120vmin;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    clip-path: polygon(50% 0, 56% 18%, 70% 4%, 70% 24%, 88% 14%, 83% 33%, 100% 33%, 88% 47%, 100% 57%, 82% 62%, 92% 80%, 73% 76%, 72% 96%, 58% 82%, 50% 100%, 42% 82%, 28% 96%, 27% 76%, 8% 80%, 18% 62%, 0 57%, 12% 47%, 0 33%, 17% 33%, 12% 14%, 30% 24%, 30% 4%, 44% 18%);
+}
+
+[data-theme='comic'] .hero-decor span:nth-child(2) {
+    background: #111;
+    scale: 1.04;
+}
+
+[data-theme='comic'] .hero-decor span:nth-child(3) {
+    background: #e62429;
+}
+
+/* ---------- One Piece: parchment, sunburst, sea ---------- */
+
+[data-theme='onepiece'] {
+    --theme-bg: radial-gradient(ellipse at 50% 40%, #fbefc9 0%, #f1dca3 60%, #e2c27d 100%);
+    --title-color: #c1121f;
+    --title-shadow: #5a3a1a;
+    --body-color: #4a2f14;
+    --scrim: transparent;
+}
+
+[data-theme='onepiece'] .hero-title {
+    text-transform: uppercase;
+    -webkit-text-stroke: 6px #fff4d6;
+    paint-order: stroke fill;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+}
+
+[data-theme='onepiece'] .hero-body {
+    font-style: italic;
+}
+
+[data-theme='onepiece'] .hero-decor span {
+    position: absolute;
+}
+
+/* sun rays from behind the figure */
+[data-theme='onepiece'] .hero-decor span:nth-child(1) {
+    inset: -20%;
+    background: repeating-conic-gradient(from 0deg at 50% 58%, rgb(255 255 255 / 0.4) 0 6deg, transparent 6deg 12deg);
+    mask-image: radial-gradient(circle at 50% 58%, #000, transparent 70%);
+}
+
+/* waves along the bottom */
+[data-theme='onepiece'] .hero-decor span:nth-child(2) {
+    inset-inline: 0;
+    bottom: 0;
+    height: 4.5rem;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 15 Q15 0 30 15 T60 15 T90 15 T120 15 V30 H0Z' fill='%232a7fba'/%3E%3C/svg%3E") repeat-x bottom / 120px 30px,
+        linear-gradient(#1c5f95, #154a75) bottom / 100% 1.6rem no-repeat;
+}
+
+
+/* ---------- desktop: decoration follows the figure (--fx-d is set per slide) ---------- */
+
+@media (min-width: 1024px) {
+    [data-theme='comic'] .hero-decor span:nth-child(n + 2) {
+        left: var(--fx-d, 50%);
+        width: 95vmin;
+    }
+
+    [data-theme='onepiece'] .hero-decor span:nth-child(1) {
+        inset: 0;
+        background: repeating-conic-gradient(from 0deg at var(--fx-d, 50%) 58%, rgb(255 255 255 / 0.4) 0 6deg, transparent 6deg 12deg);
+        mask-image: radial-gradient(circle at var(--fx-d, 50%) 58%, #000, transparent 60%);
+    }
+}
+
+/* ---------- buttons: each theme's look, set on the button itself ----------
+   (a banner can pick a button theme that differs from its design theme; colors set in Sanity
+   are inline styles on the same element and win) */
+
+[data-btn-theme='twewy'] {
+    --btn-bg: #ffe600;
+    --btn-fg: #111;
+    --btn-outline: #111;
+    --btn-shadow: #111;
+    rotate: -2deg;
+}
+
+[data-btn-theme='persona5'] {
+    --btn-bg: #000;
+    --btn-fg: #fff;
+    --btn-outline: #fff;
+    --btn-shadow: #fff;
+}
+
+[data-btn-theme='comic'] {
+    --btn-bg: #e62429;
+    --btn-fg: #fff;
+    --btn-outline: #111;
+    --btn-shadow: #111;
+    rotate: -1.5deg;
+}
+
+[data-btn-theme='onepiece'] {
+    --btn-bg: #d62828;
+    --btn-fg: #fff4d6;
+    --btn-outline: #5a3a1a;
+    --btn-shadow: #5a3a1a;
+}

@@ -39,3 +39,22 @@ export const topEdgeColor = (c?: Color) => {
     };
     return `#${mix(1)}${mix(3)}${mix(5)}`;
 };
+
+/**
+ * Color of the gradient along the left edge of a wide slide (mid-height). Used to cover the
+ * hairline of the neighbouring slide that can peek out at fractional display scales.
+ */
+export const leftEdgeColor = (c?: Color) => {
+    const first = safeHex(c);
+    if (!first || !c?.isGradient || !c.hex2 || !HEX6.test(first) || !HEX6.test(c.hex2)) return first;
+    const rad = ((Number.isFinite(c.angle) ? c.angle! : 135) * Math.PI) / 180;
+    const [w, h] = [1700, 900];
+    const length = Math.abs(w * Math.sin(rad)) + Math.abs(h * Math.cos(rad));
+    const t = Math.min(1, Math.max(0, 0.5 - (w / 2) * Math.sin(rad) / length));
+    const mix = (i: number) => {
+        const a = parseInt(first.slice(i, i + 2), 16);
+        const b = parseInt(c.hex2!.slice(i, i + 2), 16);
+        return Math.round(a + (b - a) * t).toString(16).padStart(2, '0');
+    };
+    return `#${mix(1)}${mix(3)}${mix(5)}`;
+};

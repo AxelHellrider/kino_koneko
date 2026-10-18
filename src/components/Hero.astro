@@ -1,8 +1,8 @@
 ---
-import {SwiperWrapper, Swiper, SwiperSlide} from "astro-swiper";
+import {SwiperWrapper, Swiper} from "astro-swiper";
+import {Icon} from "astro-icon/components";
 import {responsiveImage, type Banner} from '../lib/sanity';
-import {colorVars, topEdgeColor} from '../lib/color';
-import {safeHref} from '../lib/safe';
+import HeroSlide from './HeroSlide.astro';
 
 interface Props {
     banners: Banner[];
@@ -16,34 +16,21 @@ const swiperOptions = {
 };
 ---
 
-<section id="top" class="h-full w-full text-xl">
-    <Swiper class="size-full" options={swiperOptions}>
+<section id="top" class="relative h-full w-full text-xl">
+    <Swiper class="size-full" options={swiperOptions}
+            role="region" aria-roledescription="carousel" aria-label="Featured banners">
         <SwiperWrapper class="touch-pan-x">
             {banners.map((b, i) => (
-                <SwiperSlide data-theme-color={topEdgeColor(b.background?.color) ?? '#ffffff'}
-                             style={`--banner-bg: ${colorVars(b.background?.color) ?? 'transparent'}; --band: ${topEdgeColor(b.background?.color) ?? 'transparent'}`}
-                             class="flex! flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top)] pb-24 [background:var(--banner-bg)]
-                                    lg:flex-row lg:pb-0">
-                    <!-- fades from the status-bar color into the slide, hiding the seam under a gradient -->
-                    <div aria-hidden="true"
-                         class="pointer-events-none absolute inset-x-0 top-0 h-[calc(env(safe-area-inset-top)+4rem)] [background:linear-gradient(var(--band),transparent)] lg:hidden"></div>
-                    <!-- fades to white at the bottom so the translucent status bar over the next section reads white -->
-                    <div aria-hidden="true"
-                         class="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-b from-transparent to-white lg:hidden"></div>
-                    <div data-hero-text class="relative flex flex-col gap-4 max-lg:text-center lg:grow">
-                        <h1 class="retro-heading text-2xl lg:text-4xl">{b.title}</h1>
-                        {b.description && <span class="font-semibold text-md">{b.description}</span>}
-                        {safeHref(b.linkHref) && <a href={safeHref(b.linkHref)}>{b.linkLabel ?? 'Take a look'}</a>}
-                    </div>
-                    <img data-hero-figure
-                         {...responsiveImage(b.figure, [480, 800, 1200])}
-                         sizes="(max-width: 1024px) 80vw, 40vw"
-                         alt={b.figure.alt}
-                         loading={i === 0 ? 'eager' : 'lazy'}
-                         fetchpriority={i === 0 ? 'high' : 'auto'}
-                         class="relative shrink-0 object-contain max-lg:max-h-[45dvh] max-lg:w-auto max-lg:max-w-full">
-                </SwiperSlide>
+                <HeroSlide banner={b} index={i} total={banners.length} eager={i === 0}
+                           figure={responsiveImage(b.figure, [480, 800, 1200])}/>
             ))}
         </SwiperWrapper>
     </Swiper>
+    {banners.length > 1 && (
+        <button type="button" data-hero-pause aria-pressed="false" aria-label="Pause banner rotation"
+                class="group absolute left-4 top-[max(1rem,env(safe-area-inset-top))] z-40 grid size-11 place-items-center rounded-full border border-pink-200 bg-white/50 text-ink backdrop-blur-sm">
+            <Icon name="pixelarticons:pause" aria-hidden="true" focusable="false" class="size-6 group-aria-pressed:hidden"/>
+            <Icon name="pixelarticons:play" aria-hidden="true" focusable="false" class="hidden size-6 group-aria-pressed:block"/>
+        </button>
+    )}
 </section>

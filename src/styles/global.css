@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./themes.css";
 
 @theme {
     /* Color vars */
@@ -25,5 +26,21 @@
     font-style: italic;
     text-transform: uppercase;
     letter-spacing: var(--tracking-tight);
-    text-shadow: 3px 3px 0 var(--color-lilac-purple);
+    /* a banner can override these with --title-color / --title-shadow */
+    color: var(--title-color, inherit);
+    text-shadow: 3px 3px 0 var(--title-shadow, var(--color-lilac-purple));
+}
+
+/* Visible keyboard focus everywhere (mouse clicks don't trigger it) */
+:focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+}
+
+/* Entrance animations (src/scripts/motion.ts) start hidden, but only when scripting is on,
+   so the page is fully visible without JavaScript. */
+@media (scripting: enabled) {
+    [data-anim] {
+        opacity: 0;
+    }
 }

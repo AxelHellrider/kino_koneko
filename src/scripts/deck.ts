@@ -12,6 +12,7 @@ export const initDeck = (root: HTMLElement) => {
     const top = root.querySelector<HTMLElement>('[data-deck-top]')!;
     const label = root.querySelector<HTMLElement>('[data-deck-label]')!;
     const count = root.querySelector<HTMLElement>('[data-deck-count]')!;
+    const status = root.querySelector<HTMLElement>('[data-deck-status]');
     const layers = [...root.querySelectorAll<HTMLElement>('[data-deck-layer]')];
     const cards = [...root.querySelectorAll<HTMLElement>('[data-spread] > [data-tarot]')];
     let drawn = 0;
@@ -49,6 +50,8 @@ export const initDeck = (root: HTMLElement) => {
         const card = cards[drawn++];
         card.hidden = false;
         render();
+        // announced to screen readers
+        if (status) status.textContent = `Drew ${card.querySelector('h3')?.textContent?.trim() ?? 'a card'}. ${cards.length - drawn} left.`;
         if (!reduceMotion.matches) animateDraw(card);
         // keep the new card in view on small screens
         card.scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'nearest'});
@@ -61,6 +64,7 @@ export const initDeck = (root: HTMLElement) => {
         });
         drawn = 0;
         render();
+        if (status) status.textContent = 'Cards put back in the deck.';
     };
 
     cards.forEach((card) => (card.hidden = true));

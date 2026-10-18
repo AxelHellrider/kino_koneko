@@ -63,6 +63,32 @@ export interface Banner {
     figure: any;
     linkLabel?: string;
     linkHref?: string;
+    figureSide?: 'left' | 'right';
+    figureSideApplyTo?: 'both' | 'desktop' | 'mobile';
+    figureAnimation?: {
+        type?: 'slide' | 'fade' | 'slide-fade' | 'none';
+        direction?: 'auto' | 'left' | 'right' | 'top' | 'bottom';
+        ease?: string;
+        duration?: number;
+        delay?: number;
+    };
+    titleColor?: {hex?: string};
+    titleShadowColor?: {hex?: string};
+    bodyColorMode?: 'same' | 'custom';
+    bodyColor?: {hex?: string};
+    buttonTheme?: string;
+    buttonShape?: string;
+    buttonColor?: {hex?: string};
+    buttonTextColor?: {hex?: string};
+    theme?: 'none' | 'twewy' | 'persona5' | 'comic' | 'onepiece';
+    layout?: 'split' | 'poster';
+    posterFigure?: 'left' | 'center' | 'right';
+    backdropText?: string;
+    backdropColor?: {hex?: string};
+    tags?: string[];
+    sideText?: string;
+    titleAccentLine?: number;
+    titleAccentColor?: {hex?: string};
 }
 
 const BANNER_QUERY = `
@@ -70,7 +96,11 @@ const BANNER_QUERY = `
     _id, title, description,
     background{ ..., "alt": alt },
     figure{ ..., "alt": alt },
-    linkLabel, linkHref
+    linkLabel, linkHref,
+    figureSide, figureSideApplyTo, figureAnimation,
+    titleColor{hex}, titleShadowColor{hex}, bodyColorMode, bodyColor{hex},
+    buttonTheme, buttonShape, buttonColor{hex}, buttonTextColor{hex},
+    theme, layout, posterFigure, backdropText, backdropColor{hex}, tags, sideText, titleAccentLine, titleAccentColor{hex}
   }
 `;
 
