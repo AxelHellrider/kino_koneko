@@ -7,6 +7,8 @@ import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
+    // 404.html, 500.html, ... (flat files), so the server's ErrorDocument paths stay simple
+    build: {format: 'file'},
     security: {
         // hashes every inline script Astro emits; anything injected is blocked
         csp: {

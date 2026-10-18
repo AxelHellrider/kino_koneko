@@ -1,8 +1,46 @@
 # Hostinger (LiteSpeed/Apache) settings, copied into the site root on every build.
 
-# --- Error pages (static) ---
+# --- Friendly error pages: every error status shows one of six pages (no technical text) ---
+ErrorDocument 400 /400.html
+ErrorDocument 402 /400.html
+ErrorDocument 405 /400.html
+ErrorDocument 406 /400.html
+ErrorDocument 407 /400.html
+ErrorDocument 408 /400.html
+ErrorDocument 409 /400.html
+ErrorDocument 411 /400.html
+ErrorDocument 412 /400.html
+ErrorDocument 413 /400.html
+ErrorDocument 414 /400.html
+ErrorDocument 415 /400.html
+ErrorDocument 416 /400.html
+ErrorDocument 417 /400.html
+ErrorDocument 418 /400.html
+ErrorDocument 421 /400.html
+ErrorDocument 422 /400.html
+ErrorDocument 423 /400.html
+ErrorDocument 424 /400.html
+ErrorDocument 425 /400.html
+ErrorDocument 426 /400.html
+ErrorDocument 428 /400.html
+ErrorDocument 431 /400.html
+ErrorDocument 401 /403.html
+ErrorDocument 403 /403.html
+ErrorDocument 451 /403.html
 ErrorDocument 404 /404.html
+ErrorDocument 410 /404.html
+ErrorDocument 429 /429.html
 ErrorDocument 500 /500.html
+ErrorDocument 501 /500.html
+ErrorDocument 505 /500.html
+ErrorDocument 506 /500.html
+ErrorDocument 507 /500.html
+ErrorDocument 508 /500.html
+ErrorDocument 510 /500.html
+ErrorDocument 502 /503.html
+ErrorDocument 503 /503.html
+ErrorDocument 504 /503.html
+ErrorDocument 511 /503.html
 
 # --- Security headers ---
 <IfModule mod_headers.c>
@@ -33,6 +71,21 @@ ErrorDocument 500 /500.html
 <Files ".ftp-deploy-sync-state.json">
     Require all denied
 </Files>
+
+# --- Keep AI scrapers out ---
+# Known AI-training / scraping crawlers get a 403 (robots.txt stays readable so they can see the rules).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/robots\.txt$
+    RewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT-User|OAI-SearchBot|ClaudeBot|Claude-Web|anthropic-ai|CCBot|Bytespider|Amazonbot|PerplexityBot|cohere-ai|Diffbot|FacebookBot|meta-externalagent|ImagesiftBot|Omgilibot|Timpibot|Webzio|VelenPublicWebCrawler) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# Machine-readable "no AI training" signals on every response
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noai, noimageai"
+    Header always set tdm-reservation "1"
+</IfModule>
 
 # --- Don't expose directory listings ---
 Options -Indexes

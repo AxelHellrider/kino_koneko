@@ -1,22 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroButton from './HeroButton.astro';
 
 interface Props {
+    /** shown big, as part of the design */
     code: number;
+    /** short friendly name for the browser tab */
     title: string;
 }
 const {code, title} = Astro.props;
 ---
 
 <BaseLayout title={`${title} - Kino Koneko`}>
-    <div class="flex h-full w-full flex-col items-center p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24 text-xl lg:flex-row">
-        <div class="flex grow flex-col items-center justify-center gap-2 text-center">
+    <div class="flex h-full w-full flex-col items-center p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24 text-xl lg:flex-row lg:px-14">
+        <div class="flex grow flex-col items-center justify-center gap-4 text-center">
             <h1 class="retro-heading text-xl lg:text-[70px]">{code}</h1>
-            <p class="font-semibold"><slot/></p>
+            <p class="max-w-md font-semibold"><slot/></p>
+            <HeroButton href="/" shape="semi">Back to home</HeroButton>
         </div>
-        <!-- todo: Animate the figure's position from right to left -->
-        <img class="shrink-0 max-lg:max-h-[45dvh] max-lg:w-auto"
+        <img class="shrink-0 max-lg:max-h-[40dvh] max-lg:w-auto"
              src="/sailor_moon_stock_art.png"
-             alt="Sailor Moon">
+             alt="">
     </div>
 </BaseLayout>
